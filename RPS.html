@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+        <title>RPS</title>
+        <link rel="stylesheet" href="Style/style.css">
+  </head>
+  <body>
+    <header>
+      <h1 class="Title">Rock Paper Scissors</h1>
+    </header>
+    <!-- Main -->
+    <main class="main">  
+
+      <div class ="rps">
+        <!-- rock-paper-scissors -->
+        <section class = "options">
+          <!-- rock -->
+          <button class="rock" onclick=" move ='rock'; shoot() "><img class="move" src="Assets/images/rock-emoji.png" ></button>
+
+          <!-- paper -->
+
+          <button class="paper" onclick="  move ='paper'; shoot()"><img class="move" src="Assets/images/paper-emoji.png" ></button>
+
+          <!-- scissors -->
+
+          <button class="scissors" onclick=" move ='scissors'; shoot()"><img class="move" src="Assets/images/scissors-emoji.png"></button>
+
+        </section>
+        <p class="computer-choice"><img class="CRPS" src="Assets/images/rock-emoji.png" ></p>  
+        <p class="dis"></p>
+        <p class="result"></p>
+        <p class="Score">win: 0 , loss: 0 , draw: 0 </p>
+        <button class ="reset" onclick=" reset()">Reset Score</button>
+        
+      </div>
+      </div>
+    </main>
+  </body>
+  <footer>
+        <center>
+          &copy; 2023 
+          <br />
+          <a href="#">Terms of Services</a>
+        </center>
+  </footer>
+</html>
+
+
+<script>
+
+  let score = JSON.parse(localStorage.getItem('score')) ||
+  {
+      win :0,
+      loss:0,
+      tie:0
+  }
+
+  const computermove ='';
+  
+  function updateImage(computermove) {
+  let imageUrl = "";
+  if (computermove === "rock") {
+    imageUrl = "Assets/images/rock-emoji.png"; 
+  } else if (computermove === "paper") {
+    imageUrl = "Assets/images/paper-emoji.png";
+  } else if (computermove === "scissors") {
+    imageUrl = "Assets/images/scissors-emoji.png"; 
+  }
+  document.querySelector(".CRPS").src = imageUrl;
+}
+
+function shoot() {
+  let computermove ='';
+  const moves = ['rock', 'paper', 'scissors'];
+  computermove = moves[Math.floor(Math.random() * moves.length)];
+  
+  winner(computermove);
+  updateImage(computermove);
+
+  let result='';
+  let pick ='';
+}
+  
+  function winner(computermove) {
+    if (computermove === move) {
+      pick=computermove;
+      result='tie';
+      score.tie++;
+    }else if (computermove ==='rock' && move ==='scissors' ||computermove ==='scissors' && move ==='paper' ||computermove ==='paper' && move ==='rock') {
+      pick=computermove;
+      result='loss';  
+      score.loss++;
+    }else {
+      pick=computermove;
+      result='win';
+      score.win++;
+    }
+
+    if (result === 'tie') {
+      result = 'its a tie! 🤝';
+    } else if (result === 'win') {
+      result = 'you win! 🎉';
+    } else{
+      result ='you lose 😞';
+    }
+
+  localStorage.setItem('score',JSON.stringify(score));
+
+  document.querySelector('.dis').innerHTML = result
+
+  document.querySelector('.result').innerHTML = 'you picked ' + move + ' and the computer picked ' + pick ;
+  
+  UpdateScore();
+  return computermove;
+  }
+
+  // function ComputerMove(computermove) {
+  //   if (computermove ==='rock') {
+  //     document.querySelector('.CPRS').innerHTML =`<img class="CRPS" src="Assets/images/rock-emoji.png" alt="">`
+  //   } else if(computermove ==='paper') {
+  //     document.querySelector('.CPRS').innerHTML =`<img class="CRPS" src="Assets/images/paper-emoji.png" alt="">`
+  //   }else{
+  //     document.querySelector('.CPRS').innerHTML =`<img class="CRPS" src="Assets/images/scissors-emoji.png" alt="">`
+  //   }
+
+  // }
+  
+  function reset() {
+    score.win = 0;
+    score.loss = 0;
+    score.tie = 0;
+    localStorage.removeItem('score');
+    UpdateScore();
+    document.querySelector('.result').innerHTML =''
+    document.querySelector(".CRPS").src =''
+    document.querySelector(".dis").innerHTML =''
+  }
+ 
+  function UpdateScore() {
+    document.querySelector('.Score').innerHTML = ' wins : '+score.win+' loses : '+score.loss+' ties : '+score.tie;
+  }
+  
+  function RPS() { 
+    document.querySelector('.rps').innerHTML = `    <h3>Rock Paper Scissors</h3>
+        <button onclick=" move ='rock';  randomnum =Math.random(); shoot(randomnum) ">Rock</button>
+        <button onclick="  move ='paper';  randomnum =Math.random(); shoot(randomnum)">Paper</button>
+        <button onclick=" move ='scissors'; randomnum =Math.random(); shoot(randomnum)">Scissors</button>
+        <p class="result"></p>
+        <p class="Score">win: 0 , loss: 0 , draw: 0 </p>
+        <button class ="reset" onclick=" reset()">Reset Score</button>
+
+        <button class="play-rps" onclick="QRPS()">Quit Rock Paper Scissors</button>`;
+  }
+  
+  function QRPS(){
+    document.querySelector('.rps').innerHTML =`<br>
+        <button class="play-rps" onclick="RPS(),UpdateScore()">Play Rock Paper Scissors</button>`
+  }
+
+</script>
